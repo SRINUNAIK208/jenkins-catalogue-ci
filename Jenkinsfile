@@ -67,7 +67,6 @@ pipeline {
                             curl -s \
                             -H "Accept: application/vnd.github+json" \
                             -H "Authorization: token ${GITHUB_TOKEN}" \
-                            -H "X-GitHub-Api-Version: 2026-03-10" \
                             "https://api.github.com/repos/daws-84s/catalogue/dependabot/alerts"
                         ''',
                         returnStdout: true
