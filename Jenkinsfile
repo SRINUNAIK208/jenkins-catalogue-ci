@@ -58,7 +58,7 @@ pipeline {
         // }
         stage('Dependabot Check') {
           environment{
-            GITHUB_TOKEN = credentials('githyb-token')
+            GITHUB_TOKEN = credentials('github-token')
           }
             steps {
                 script {
