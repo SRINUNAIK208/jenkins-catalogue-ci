@@ -57,13 +57,16 @@ pipeline {
             }
         }
         stage('Dependabot Check') {
+          environment{
+            GITHUB_TOKEN = credentials('githyb-token')
+          }
             steps {
                 script {
                     def response = sh(
                         script: '''
                             curl -s \
                             -H "Accept: application/vnd.github+json" \
-                            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+                            -H "Authorization: token ${GITHUB_TOKEN}" \
                             -H "X-GitHub-Api-Version: 2026-03-10" \
                             "https://api.github.com/repos/daws-84s/catalogue/dependabot/alerts"
                         ''',
