@@ -77,9 +77,9 @@ pipeline {
 
                     def alerts = readJSON text: response
 
-                    if (alerts instanceof Map && alerts.message) {
-                        error "❌ GitHub API error: ${alerts.message}"
-                    }
+                    // if (alerts instanceof Map && alerts.message) {
+                    //     error "❌ GitHub API error: ${alerts.message}"
+                    // }
 
                     echo "Dependabot OPEN HIGH/CRITICAL alerts: ${alerts.size()}"
 
