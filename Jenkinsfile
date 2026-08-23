@@ -76,7 +76,7 @@ pipeline {
                     def alerts = readJSON text: response
 
                     def criticalOrHigh = alerts.findAll { alert ->
-                        def severity = alert?.security_vulnerability?.severity?.toLowerCase()
+                        def severity = alert?.security_advisory?.severity?.toLowerCase()
                         def state = alert?.state?.toLowerCase()
 
                         state == 'open' &&
