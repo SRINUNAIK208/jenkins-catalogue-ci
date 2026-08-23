@@ -4,7 +4,7 @@ pipeline {
     }
     options{
         timeout(time:30, unit: 'MINUTES')
-        disabledConcurrentBuild()
+        disableConcurrentBuilds()
     }
     environment {
         appVersion = ''
