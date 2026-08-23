@@ -48,13 +48,13 @@ pipeline {
             }
             
         }
-        // stage('sonarqube quality gates'){
-        //     steps{
-        //         timeout(time: 10, unit: 'MINUTES') {
-        //            waitForQualityGate abortPipeline: true
-        //         }
-        //     }
-        // }
+        stage('sonarqube quality gates'){
+            steps{
+                timeout(time: 10, unit: 'MINUTES') {
+                   waitForQualityGate abortPipeline: true
+                }
+            }
+        }
        
         stage('build docker image'){
             steps{
