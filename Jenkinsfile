@@ -12,6 +12,7 @@ pipeline {
         ACC_ID = '388343452532'
         project = 'roboshop'
         component = 'catalogue'
+       
        // SCANNER_HOME = tool 'Sonar'
     }  
     stages{
@@ -52,6 +53,38 @@ pipeline {
             steps{
                 timeout(time: 10, unit: 'MINUTES') {
                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        stage('Dependabot Check') {
+            steps {
+                script {
+                    def response = sh(
+                        script: '''
+                            curl -s \
+                            -H "Accept: application/vnd.github+json" \
+                            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+                            -H "X-GitHub-Api-Version: 2026-03-10" \
+                            "https://api.github.com/repos/daws-84s/catalogue/dependabot/alerts"
+                        ''',
+                        returnStdout: true
+                    ).trim()
+
+                    def alerts = readJSON text: response
+
+                    def criticalOrHigh = alerts.findAll { alert ->
+                        def severity = alert?.security_vulnerability?.severity?.toLowerCase()
+                        def state = alert?.state?.toLowerCase()
+
+                        state == 'open' &&
+                        (severity == 'critical' || severity == 'high')
+                    }
+
+                    if (criticalOrHigh) {
+                        error "❌ Dependabot found ${criticalOrHigh.size()} open HIGH/CRITICAL alerts"
+                    }
+
+                    echo "✅ No open HIGH/CRITICAL Dependabot alerts"
                 }
             }
         }
