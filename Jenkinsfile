@@ -64,13 +64,13 @@ pipeline {
                 }
             }
         }  
-        stage("tigger deployment"){
-            steps{
-                build job: 'catalogue-cd', 
-                wait: false, 
-                propagate: false
-            }
-        } 
+        // stage("tigger deployment"){
+        //     steps{
+        //         build job: 'catalogue-cd', 
+        //         wait: false, 
+        //         propagate: false
+        //     }
+        // } 
 
     }
     post {
