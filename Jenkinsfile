@@ -12,7 +12,7 @@ pipeline {
         ACC_ID = '388343452532'
         project = 'roboshop'
         component = 'catalogue'
-       // SCANNER_HOME = tool 'Sonar-scanner'
+        SCANNER_HOME = tool 'Sonar-scanner'
     }  
     stages{
         stage('read the package json'){
@@ -33,18 +33,18 @@ pipeline {
                 """
             }
         }
-        // stage('sonarqube analysis'){
-        //     steps{
+        stage('sonarqube analysis'){
+            steps{
 
                 
-        //         withSonarQubeEnv(credentialsId: 'sonar-credentialsId', installationName: 'Sonar'){
-        //             sh """
-        //                 $SCANNER_HOME/bin/sonar-scanner
-        //             """
-        //         }
-        //     }
+                withSonarQubeEnv(credentialsId: 'sonar-auth', installationName: 'Sonar'){
+                    sh """
+                        $SCANNER_HOME/bin/sonar-scanner
+                    """
+                }
+            }
             
-        // }
+        }
         // stage('sonarqube quality gates'){
         //     steps{
         //         timeout(time: 10, unit: 'MINUTES') {
