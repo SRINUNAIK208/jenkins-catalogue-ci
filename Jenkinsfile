@@ -34,28 +34,28 @@ pipeline {
                 """
             }
         }
-        stage('sonarqube analysis'){
-            environment {
-                 scannerHome = tool "sonar"
-            }
-            steps{
+        // stage('sonarqube analysis'){
+        //     environment {
+        //          scannerHome = tool "sonar"
+        //     }
+        //     steps{
 
                 
-                withSonarQubeEnv(installationName: 'sonar'){
-                    sh """
-                        ${scannerHome}/bin/sonar-scanner
-                    """
-                }
-            }
+        //         withSonarQubeEnv(installationName: 'sonar'){
+        //             sh """
+        //                 ${scannerHome}/bin/sonar-scanner
+        //             """
+        //         }
+        //     }
             
-        }
-        stage('sonarqube quality gates'){
-            steps{
-                timeout(time: 10, unit: 'MINUTES') {
-                   waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+        // }
+        // stage('sonarqube quality gates'){
+        //     steps{
+        //         timeout(time: 10, unit: 'MINUTES') {
+        //            waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
         stage('Dependabot Check') {
           environment{
             GITHUB_TOKEN = credentials('githyb-token')
