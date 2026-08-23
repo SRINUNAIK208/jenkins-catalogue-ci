@@ -12,7 +12,7 @@ pipeline {
         ACC_ID = '388343452532'
         project = 'roboshop'
         component = 'catalogue'
-        SCANNER_HOME = tool 'Sonar'
+       // SCANNER_HOME = tool 'Sonar'
     }  
     stages{
         stage('read the package json'){
@@ -34,12 +34,15 @@ pipeline {
             }
         }
         stage('sonarqube analysis'){
+            environment {
+                 scannerHome = tool "sonar"
+            }
             steps{
 
                 
                 withSonarQubeEnv(credentialsId: 'sonar', installationName: 'Sonar'){
                     sh """
-                        $SCANNER_HOME/bin/sonar-scanner
+                        ${scannerHome}/bin/sonar-scanner
                     """
                 }
             }
