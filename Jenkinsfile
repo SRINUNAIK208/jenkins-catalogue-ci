@@ -12,7 +12,7 @@ pipeline {
         ACC_ID = '388343452532'
         project = 'roboshop'
         component = 'catalogue'
-        SCANNER_HOME = tool 'Sonar-scanner'
+       // SCANNER_HOME = tool 'Sonar-scanner'
     }  
     stages{
         stage('read the package json'){
