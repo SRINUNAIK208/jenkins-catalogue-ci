@@ -56,34 +56,35 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Dependabot Check') {
-          environment{
-            GITHUB_TOKEN = credentials('github-token')
-          }
+       stage('Dependabot Check') {
+            environment {
+                GITHUB_TOKEN = credentials('github-token')
+            }
+
             steps {
                 script {
+
                     def response = sh(
                         script: '''
                             curl -s \
                             -H "Accept: application/vnd.github+json" \
                             -H "Authorization: token ${GITHUB_TOKEN}" \
-                            "https://api.github.com/repos/daws-84s/catalogue/dependabot/alerts"
+                            -H "X-GitHub-Api-Version: 2026-03-10" \
+                            "https://api.github.com/repos/daws-84s/catalogue/dependabot/alerts?state=open&severity=high,critical"
                         ''',
                         returnStdout: true
                     ).trim()
 
                     def alerts = readJSON text: response
 
-                    def criticalOrHigh = alerts.findAll { alert ->
-                        def severity = alert?.security_advisory?.severity?.toLowerCase()
-                        def state = alert?.state?.toLowerCase()
-
-                        state == 'open' &&
-                        (severity == 'critical' || severity == 'high')
+                    if (alerts instanceof Map && alerts.message) {
+                        error "❌ GitHub API error: ${alerts.message}"
                     }
 
-                    if (criticalOrHigh) {
-                        error "❌ Dependabot found ${criticalOrHigh.size()} open HIGH/CRITICAL alerts"
+                    echo "Dependabot OPEN HIGH/CRITICAL alerts: ${alerts.size()}"
+
+                    if (alerts.size() > 0) {
+                        error "❌ Dependabot found ${alerts.size()} open HIGH/CRITICAL alerts"
                     }
 
                     echo "✅ No open HIGH/CRITICAL Dependabot alerts"
