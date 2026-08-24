@@ -34,39 +34,7 @@ pipeline {
                 """
             }
         }
-        stage('ECR Scan'){
-            steps{
-                script{
-                    withAWS(credentials: 'aws-cred', region: 'us-east-1'){
-                        def findings = sh(
-                            script: """
-                              aws ecr describe-image-scan-findings \
-                              --repository-name roboshop/catalogue \
-                              --image-id imageTag=${appVersion} \
-                              --region us-east-1 \
-                              --output json
-
-                            """, 
-                            returnStdout: true
-                            
-                         ).trim();
-                         def json = readJSON text: findings
-                         def highCritical = json.imageScanFindings.findings.findAll {
-                            it.severity == "HiGH" || it.severity == "CRITICAL"
-                         }
-                         if (highCritical.size() > 0)
-                         {
-                             echo "❌ Found ${highCritical.size()} HIGH/CRITICAL vulnerabilities!"
-                            currentBuild.result = 'FAILURE'
-                            error("Build failed due to vulnerabilities")
-                        } else {
-                            echo "✅ No HIGH/CRITICAL vulnerabilities found."
-                        }
-                         
-                    }
-                }
-            }
-        }
+       
         // stage('sonarqube analysis'){
         //     environment {
         //          scannerHome = tool "sonar"
@@ -136,6 +104,39 @@ pipeline {
                 }
             }
         }  
+         stage('ECR Scan'){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-cred', region: 'us-east-1'){
+                        def findings = sh(
+                            script: """
+                              aws ecr describe-image-scan-findings \
+                              --repository-name roboshop/catalogue \
+                              --image-id imageTag=${appVersion} \
+                              --region us-east-1 \
+                              --output json
+
+                            """, 
+                            returnStdout: true
+                            
+                         ).trim();
+                         def json = readJSON text: findings
+                         def highCritical = json.imageScanFindings.findings.findAll {
+                            it.severity == "HiGH" || it.severity == "CRITICAL"
+                         }
+                         if (highCritical.size() > 0)
+                         {
+                             echo "❌ Found ${highCritical.size()} HIGH/CRITICAL vulnerabilities!"
+                            currentBuild.result = 'FAILURE'
+                            error("Build failed due to vulnerabilities")
+                        } else {
+                            echo "✅ No HIGH/CRITICAL vulnerabilities found."
+                        }
+                         
+                    }
+                }
+            }
+        }
         // stage("tigger deployment"){
         //     steps{
         //         build job: 'catalogue-cd', 
