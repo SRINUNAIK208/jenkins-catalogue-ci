@@ -112,7 +112,7 @@ pipeline {
                             script: """
                               aws ecr describe-image-scan-findings \
                               --repository-name roboshop/catalogue \
-                              --image-id imageTag=${appVersion} \
+                              --image-id imageTag=sha256:be555a9f8dd81cd3fefdbb0d144216d5249cc2464ae522d64e29a8a44393f00e \
                               --region us-east-1 \
                               --output json
 
