@@ -15,6 +15,10 @@ pipeline {
        
        // SCANNER_HOME = tool 'Sonar'
     }  
+     parameters {
+       
+        booleanParam(name: 'deploy', defaultValue: false, description: 'Toggle to enable or disable tests')
+    }
     stages{
         stage('read the package json'){
             steps{
@@ -137,13 +141,18 @@ pipeline {
                 }
             }
         }
-        // stage("tigger deployment"){
-        //     steps{
-        //         build job: 'catalogue-cd', 
-        //         wait: false, 
-        //         propagate: false
-        //     }
-        // } 
+        stage("tigger deployment"){
+            steps{
+                build job: 'catalogue-cd',
+                 parameters: [
+                    string(name: 'appVersion', value: '${appVersion}'), 
+                    string(name: 'deploy_to', value: 'dev')
+                 ],
+                wait: false, 
+                propagate: false
+
+            }
+        } 
 
     }
     post {
