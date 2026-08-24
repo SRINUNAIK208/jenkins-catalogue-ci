@@ -145,7 +145,7 @@ pipeline {
             steps{
                 build job: 'catalogue-cd',
                  parameters: [
-                    string(name: 'appVersion', value: '${appVersion}'), 
+                    string(name: 'appVersion', value: "${appVersion}"), 
                     string(name: 'deploy_to', value: 'qa')
                  ],
                 wait: false, 
