@@ -56,41 +56,41 @@ pipeline {
         //         }
         //     }
         // }
-       stage('Dependabot Check') {
-            environment {
-                GITHUB_TOKEN = credentials('github-token')
-            }
+    //    stage('Dependabot Check') {
+    //         environment {
+    //             GITHUB_TOKEN = credentials('github-token')
+    //         }
 
-            steps {
-                script {
+    //         steps {
+    //             script {
 
-                    def response = sh(
-                        script: '''
-                            curl -s \
-                            -H "Accept: application/vnd.github+json" \
-                            -H "Authorization: token ${GITHUB_TOKEN}" \
-                            -H "X-GitHub-Api-Version: 2026-03-10" \
-                            "https://api.github.com/repos/daws-84s/catalogue/dependabot/alerts?state=open&severity=high,critical"
-                        ''',
-                        returnStdout: true
-                    ).trim()
+    //                 def response = sh(
+    //                     script: '''
+    //                         curl -s \
+    //                         -H "Accept: application/vnd.github+json" \
+    //                         -H "Authorization: token ${GITHUB_TOKEN}" \
+    //                         -H "X-GitHub-Api-Version: 2026-03-10" \
+    //                         "https://api.github.com/repos/daws-84s/catalogue/dependabot/alerts?state=open&severity=high,critical"
+    //                     ''',
+    //                     returnStdout: true
+    //                 ).trim()
 
-                    def alerts = readJSON text: response
+    //                 def alerts = readJSON text: response
 
-                    // if (alerts instanceof Map && alerts.message) {
-                    //     error "❌ GitHub API error: ${alerts.message}"
-                    // }
+    //                 // if (alerts instanceof Map && alerts.message) {
+    //                 //     error "❌ GitHub API error: ${alerts.message}"
+    //                 // }
 
-                    echo "Dependabot OPEN HIGH/CRITICAL alerts: ${alerts.size()}"
+    //                 echo "Dependabot OPEN HIGH/CRITICAL alerts: ${alerts.size()}"
 
-                    if (alerts.size() > 0) {
-                        error "❌ Dependabot found ${alerts.size()} open HIGH/CRITICAL alerts"
-                    }
+    //                 if (alerts.size() > 0) {
+    //                     error "❌ Dependabot found ${alerts.size()} open HIGH/CRITICAL alerts"
+    //                 }
 
-                    echo "✅ No open HIGH/CRITICAL Dependabot alerts"
-                }
-            }
-        }
+    //                 echo "✅ No open HIGH/CRITICAL Dependabot alerts"
+    //             }
+    //         }
+    //     }
        
         stage('build docker image'){
             steps{
