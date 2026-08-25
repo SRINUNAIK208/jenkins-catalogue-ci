@@ -13,7 +13,7 @@ pipeline {
         project = 'roboshop'
         component = 'catalogue'
        
-       // SCANNER_HOME = tool 'Sonar'
+    
     }  
      parameters {
        

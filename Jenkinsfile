@@ -2,4 +2,4 @@
 def configMap = [
     greeting: "Hello i am jenkins shared library"
 ]
-samplePipeline(configMap)
+samplePipeline(configMap) 
